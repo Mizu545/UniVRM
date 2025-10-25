@@ -2,7 +2,7 @@
 #define VRMC_MATERIALS_MTOON_RENDER_PIPELINE_INCLUDED
 
 // Include
-#ifdef MIZUTOON_URP
+#ifdef MTOON_URP
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -11,49 +11,45 @@
 #include <AutoLight.cginc>
 #include <Lighting.cginc>
 #include <UnityShaderVariables.cginc>
-#endif 
-
-#ifdef MIZUTOON_HDRP
-#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/Lighting.hlsl"
 #endif
 
 // Texture
-#ifdef MIZUOON_URP
-#define MIZUTOON_DECLARE_TEX2D(tex) TEXTURE2D_FLOAT(tex); SAMPLER(sampler##tex);
-#define MIZUOON_DECLARE_TEX2D_FLOAT(tex) TEXTURE2D(tex); SAMPLER(sampler##tex);
+#ifdef MTOON_URP
+#define MTOON_DECLARE_TEX2D(tex) TEXTURE2D_FLOAT(tex); SAMPLER(sampler##tex);
+#define MTOON_DECLARE_TEX2D_FLOAT(tex) TEXTURE2D(tex); SAMPLER(sampler##tex);
 #define MTOON_SAMPLE_TEXTURE2D(tex, uv) SAMPLE_TEXTURE2D(tex, sampler##tex, uv)
 #else
-#define MIZUTOON_DECLARE_TEX2D(tex) UNITY_DECLARE_TEX2D(tex)
-#define MIZUTOON_DECLARE_TEX2D_FLOAT(tex) UNITY_DECLARE_TEX2D_FLOAT(tex);
-#define MIZUTOON_SAMPLE_TEXTURE2D(tex, uv) UNITY_SAMPLE_TEX2D(tex, uv)
+#define MTOON_DECLARE_TEX2D(tex) UNITY_DECLARE_TEX2D(tex)
+#define MTOON_DECLARE_TEX2D_FLOAT(tex) UNITY_DECLARE_TEX2D_FLOAT(tex);
+#define MTOON_SAMPLE_TEXTURE2D(tex, uv) UNITY_SAMPLE_TEX2D(tex, uv)
 #endif
 
 // Fog and lighting
-#ifdef MIZUTOON_URP
+#ifdef MTOON_URP
 
 #ifdef REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR
 
-#define MIZUTOON_FOG_AND_LIGHTING_COORDS(idx1, idx2, idx3) \
+#define MTOON_FOG_AND_LIGHTING_COORDS(idx1, idx2, idx3) \
     half4 fogFactorAndVertexLight : TEXCOORD##idx1; \
     float4 shadowCoord              : TEXCOORD##idx2; \
     DECLARE_LIGHTMAP_OR_SH(lightmapUV, vertexSH, idx3);
 
 #else
 
-#define MIZUTOON_FOG_AND_LIGHTING_COORDS(idx1, idx2, idx3) \
+#define MTOON_FOG_AND_LIGHTING_COORDS(idx1, idx2, idx3) \
     half4 fogFactorAndVertexLight : TEXCOORD##idx1; \
     DECLARE_LIGHTMAP_OR_SH(lightmapUV, vertexSH, idx);
 
 #endif
 
 #else
-#define MIZUTOON_FOG_AND_LIGHTING_COORDS(idx1, idx2, idx3) \
+#define MTOON_FOG_AND_LIGHTING_COORDS(idx1, idx2, idx3) \
     UNITY_FOG_COORDS(5) \
     UNITY_LIGHTING_COORDS(6,7)
 #endif
 
 // Light
-#ifdef MIZUTOON_URP
+#ifdef MTOON_URP
 
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 #define MTOON_SHADOW_COORD(input) input.shadowCoord
